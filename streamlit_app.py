@@ -1,6 +1,7 @@
 import streamlit as st
 import pickle
 import pandas as pd
+import numpy as np
 
 # Page configuration
 st.set_page_config(
@@ -55,7 +56,7 @@ with open("feature_columns.pkl", "rb") as file:
     feature_columns = pickle.load(file)
 
 
-st.title("Used Vehicle Price Predictor")
+st.title(" Used Vehicle Price Predictor")
 st.write("Enter the vehicle details to estimate its selling price.")
 
 
@@ -144,6 +145,5 @@ if st.button("Predict Price"):
     )
 
     # Predict
-    prediction = model.predict(input_data)[0]
-
+    prediction = np.expm1(model.predict(input_data)[0])
     st.success(f"Estimated Selling Price: ₹{prediction:,.0f}")
