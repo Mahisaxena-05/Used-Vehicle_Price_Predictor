@@ -8,6 +8,43 @@ st.set_page_config(
     
     layout="centered"
 )
+# Custom Styling
+st.markdown("""
+<style>
+
+.main {
+    background-color: #f5f7fb;
+}
+
+h1 {
+    color: #1f4e79;
+    text-align: center;
+    font-size: 42px;
+}
+
+.stMarkdown p {
+    text-align: center;
+    color: #555;
+}
+
+div.stButton > button {
+    width: 100%;
+    background-color: #1f4e79;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+div.stButton > button:hover {
+    background-color: #163a5c;
+    color: white;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # Load model
 with open("vehicle_price_model.pkl", "rb") as file:
@@ -18,7 +55,7 @@ with open("feature_columns.pkl", "rb") as file:
     feature_columns = pickle.load(file)
 
 
-st.title("🚗 Used Vehicle Price Predictor")
+st.title("Used Vehicle Price Predictor")
 st.write("Enter the vehicle details to estimate its selling price.")
 
 
