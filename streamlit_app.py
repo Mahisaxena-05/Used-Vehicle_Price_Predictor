@@ -75,14 +75,16 @@ age = st.number_input(
     "Vehicle Age (Years)",
     min_value=1,
     max_value=50,
-    value=10
+    value=None,
+    placeholder="Enter vehicle age..."
 )
 
 km_driven = st.number_input(
     "Kilometers Driven",
     min_value=0,
     max_value=1000000,
-    value=50000
+    value=None,
+    placeholder="Enter kilometers driven..."
 )
 
 fuel = st.selectbox(
@@ -113,37 +115,45 @@ owner = st.selectbox(
 
 
 # Prediction
+# Prediction
 if st.button("Predict Price"):
 
-    input_data = pd.DataFrame({
-        "age": [age],
-        "km_driven": [km_driven],
-        "brand": [brand],
-        "fuel": [fuel],
-        "seller_type": [seller_type],
-        "transmission": [transmission],
-        "owner": [owner]
-    })
+    if age is None or km_driven is None:
+        st.warning("Please enter vehicle age and kilometers driven.")
 
-    # One-hot encoding
-    input_data = pd.get_dummies(
-        input_data,
-        columns=[
-            "brand",
-            "fuel",
-            "seller_type",
-            "transmission",
-            "owner"
-        ],
-        dtype=int
-    )
+    else:
+        input_data = pd.DataFrame({
+            "age": [age],
+            "km_driven": [km_driven],
+            "brand": [brand],
+            "fuel": [fuel],
+            "seller_type": [seller_type],
+            "transmission": [transmission],
+            "owner": [owner]
+        })
 
-    # Match training columns
-    input_data = input_data.reindex(
-        columns=feature_columns,
-        fill_value=0
-    )
+        # One-hot encoding
+        input_data = pd.get_dummies(
+            input_data,
+            columns=[
+                "brand",
+                "fuel",
+                "seller_type",
+                "transmission",
+                "owner"
+            ],
+            dtype=int
+        )
 
-    # Predict
-    prediction = np.expm1(model.predict(input_data)[0])
-    st.success(f"Estimated Selling Price: ₹{prediction:,.0f}")
+        # Match training columns
+        input_data = input_data.reindex(
+            columns=feature_columns,
+            fill_value=0
+        )
+
+        # Predict
+        prediction = np.expm1(model.predict(input_data)[0])
+
+        st.success(
+            f"Estimated Selling Price: ₹{prediction:,.0f}"
+        )
